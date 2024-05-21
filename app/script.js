@@ -7,8 +7,8 @@ const statuses = {
   WORK: "work",
 };
 const times = {
-  TWENTY_SEC: 2,
-  TWENT_MIN: 2,
+  TWENTY_SEC: 20,
+  TWENT_MIN: 1200,
 };
 
 const playBell = () => {
