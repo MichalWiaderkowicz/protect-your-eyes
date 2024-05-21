@@ -5,7 +5,6 @@ const App = () => {
   const [status, setStatus] = useState("off");
   const [time, setTime] = useState(20 * 60);
   const [timer, setTimer] = useState(null);
-  console.log(status, timer);
 
   const padTo2Digits = (num) => {
     return num.toString().padStart(2, "0");
@@ -20,6 +19,17 @@ const App = () => {
 
     return formatedTimer(time);
   }, [time]);
+
+  const startTimer = () => {
+    setTime(1200);
+    setStatus("work");
+    setTimer(
+      setInterval(() => {
+        setTime((time) => time - 1);
+      }, 1000)
+    );
+  };
+
   return (
     <div>
       <h1>Protect your eyes</h1>
@@ -39,7 +49,11 @@ const App = () => {
       {status === "work" && <img src="./images/work.png" />}
       {status === "rest" && <img src="./images/rest.png" />}
       {status !== "off" && <div className="timer">{formatTime}</div>}
-      {status === "off" && <button className="btn">Start</button>}
+      {status === "off" && (
+        <button className="btn" onClick={startTimer}>
+          Start
+        </button>
+      )}
       {status !== "off" && <button className="btn">Stop</button>}
       <button className="btn btn-close">X</button>
     </div>
