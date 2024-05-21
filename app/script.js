@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { render } from "react-dom";
 
 const App = () => {
   const [status, setStatus] = useState("off");
   const [time, setTime] = useState(20 * 60);
   const [timer, setTimer] = useState(null);
-  console.log(status, time, timer);
+  console.log(status, timer);
+
+  const padTo2Digits = (num) => {
+    return num.toString().padStart(2, "0");
+  };
+
+  const formatTime = useMemo(() => {
+    const formatedTimer = (seconds) => {
+      let minutes = Math.floor(seconds / 60);
+      seconds = seconds % 60;
+      return `${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
+    };
+
+    return formatedTimer(time);
+  }, [time]);
   return (
     <div>
       <h1>Protect your eyes</h1>
@@ -24,7 +38,7 @@ const App = () => {
       )}
       {status === "work" && <img src="./images/work.png" />}
       {status === "rest" && <img src="./images/rest.png" />}
-      {status !== "off" && <div className="timer">18:23</div>}
+      {status !== "off" && <div className="timer">{formatTime}</div>}
       {status === "off" && <button className="btn">Start</button>}
       {status !== "off" && <button className="btn">Stop</button>}
       <button className="btn btn-close">X</button>
