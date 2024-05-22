@@ -6,10 +6,6 @@ const statuses = {
   REST: "rest",
   WORK: "work",
 };
-const times = {
-  TWENTY_SEC: 20,
-  TWENT_MIN: 1200,
-};
 
 const playBell = () => {
   const bell = new Audio("./sounds/bell.wav");
@@ -22,16 +18,9 @@ const App = () => {
   const [timer, setTimer] = useState(null);
 
   useEffect(() => {
-    if (status !== statuses.OFF && time <= 0) {
-      setTime(times.TWENTY_SEC);
-      setStatus((prevStatus) => {
-        if (prevStatus === statuses.WORK) return statuses.REST;
-        return statuses.WORK;
-      });
-      //dzwiek
-      playBell();
-    }
-  }, [time]);
+    if (status === statuses.WORK) setTime(1200);
+    if (status === statuses.REST) setTime(20);
+  }, [status]);
 
   const padTo2Digits = (num) => {
     return num.toString().padStart(2, "0");
@@ -48,11 +37,22 @@ const App = () => {
   }, [time]);
 
   const startTimer = () => {
-    setTime(times.TWENT_MIN);
+    if (timer) clearInterval(timer);
     setStatus(statuses.WORK);
     setTimer(
       setInterval(() => {
-        setTime((time) => time - 1);
+        setTime((prevValue) => {
+          if (prevValue <= 0) {
+            setStatus((prevStatus) => {
+              if (prevStatus === statuses.WORK) return statuses.REST;
+              return statuses.WORK;
+            });
+            //dzwiek
+            playBell();
+          } else {
+            return prevValue - 1;
+          }
+        });
       }, 1000)
     );
   };
